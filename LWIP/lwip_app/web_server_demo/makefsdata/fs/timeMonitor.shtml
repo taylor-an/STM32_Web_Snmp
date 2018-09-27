@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" http-equiv="refresh" content="4"/>
+		<title>BDSDO</title>
+		<style type="text/css">
+
+		h3{background-color:#0066CC; color:#fff; margin-top:30px；}
+		table{border:solid 1px; border-collapse: collapse;}
+		table td{border:solid 1px; padding:5px; text-align: center;}
+		table th{border:solid 1px; padding:5px; text-align: center;}
+
+		.ul1{margin:0;padding:0; list-style:none;}
+		.li1{margin:0;padding:0; list-style:none;}
+		.menu{width:800px;height:48px;margin:0 auto; background:url(img/tab.jpg) repeat-x; }
+		.menu ul{width:800px;float:left;height:48px;display:inline;}
+		.menu ul li{width:200px;height:48px; line-height:48px; text-align:center; float:left;display:inline; }
+		.menu ul li a{width:200px;height:48px; float:left;text-decoration:none; color:#fff; font-size:18px;font-weight:bold;}
+		.menu ul li a:hover{ background:#FF0000 repeat-x; }			
+		.logo{}
+		.bodystyle{  margin:0 auto; width:1000px; background:#d5d5d7;}		 
+		</style>
+	</head>
+
+	<body>
+		<div class="menu">
+			<ul class="ul1">
+		    	<li class="li1"><a href="index.shtml">主页</a></li>
+		        <li class="li1"><a href="set.shtml">设置</a></li>
+		        <li class="li1"><a href="timeMonitor.shtml">同步监测</a></li>
+		        <li class="li1"><a href="https://www.bdstar.com" target="_blank">联系我们</a></li>
+		    </ul>
+		</div>	
+		
+
+		<div align="center">
+		    <h3><span>PTP监控</span> </h3>
+			<table id="tb1" class="infomation">
+				  <tr>
+				  	<th width = "210" colspan="2">IP地址</th>
+				  	<th width = "200">秒</th>
+				  	<th width = "200">纳秒</th>
+				  	<th width="200">更新时间</th>
+				  </tr>
+			</table>
+		</div>
+		
+		<div align="center">
+			<h3><span>NTP监控</span></h3>		
+			<table id="tb2" class="infomation">
+				<tr>
+					<th width = "210" colspan="2">IP地址</th>
+					<th width = "200">秒</th>
+					<th width = "200">微秒</th>
+					<th width = "200">更新时间</th>
+				</tr>
+			</table>		
+		</div>
+		
+		<div align="center">
+			<h3><span>E1监控</span></h3>
+			<table id="tb3" class="infomation">
+				<tr>
+					<th width="210" colspan="2">IP地址</th>
+					<th width="200">秒</th>
+					<th width="200">纳秒</th>
+					<th width="200">更新时间</th>
+				</tr>
+			</table>
+		</div>
+
+		<div id="ssi">  <!-- 使用title属性记录该SSI标签对应的表格ID -->
+			<p id="PTPMonitorGroup1" title="tb1" style="display: none;"><!--#PTPGroup1--></p>
+			<p id="PTPMonitorGroup2" title="tb1" style="display: none;"><!--#PTPGroup2--></p>
+			<p id="NTPMonitorGroup1" title="tb2" style="display: none;"><!--#NTPGroup1--></p>
+			<p id="NTPMonitorGroup2" title="tb2" style="display: none;"><!--#NTPGroup2--></p>
+			<p id="E1MonitorGroup1"  title="tb3" style="display: none;"><!--#E1Group1--></p>
+			<p id="E1MonitorGroup2"  title="tb3" style="display: none;"><!--#E1Group2--></p>
+		</div>
+
+		<script type="text/javascript">
+			function dataProcess (argument) {				
+				var re1 = /\$/;
+				var ele = document.getElementById("ssi").children;
+
+				var tab = document.getElementById("tb1");
+				var res; 
+				var num;
+				var tabs = document.getElementsByClassName("infomation");
+
+				for(var i = 0; i < ele.length; i++)
+				{
+					res = ele[i].innerHTML.split(re1);  //获取SSI标签的内容,并且按照指定的分割符切片
+					res.splice(0, 1); //去掉SSI标签的头部
+					num = dataFill(res, document.getElementById(ele[i].title), 8, 0);
+				}
+
+				for(var i = 0; i < tabs.length; i++)  //遍历表格  
+				{
+					if(tabs[i].rows.length == 1) //当表格只有一行的时候 说明没有数据
+					{
+						var row = tabs[i].insertRow();
+						var col = row.insertCell();
+						col.colSpan = 5;
+						col.innerText = "暂无数据";
+						col.style.background = 'red';
+					}
+					else//有数据的时候 修改第一列"序号"的宽度
+					{
+						tabs[i].rows[1].cells[0].style.width = '10px';
+					}
+				}
+			}
+			//                 数据  表格  最大添加的行数 表格的起始行序号
+			function dataFill (data, tb, group_len, start) 
+			{			
+				if(data.length >= 4)
+				{
+					for (var i = 0; i < group_len; i++) 
+					{
+						if(data[i*4] != undefined && data[i*4] != "")
+						{											
+							var row = tb.insertRow(); 
+							var col = row.insertCell(0); 
+							col.innerHTML = ++start;			  //第一列 序号   
+
+						    col = row.insertCell(1);
+						    col.innerText = data[i*4];            //第二列 IP
+
+							col = row.insertCell(2);
+							col.innerText = data[i*4+1];          //第三列 秒
+
+						    col = row.insertCell(3);		    	    
+						    col.innerText = data[i*4+2];		 //第四列 微秒(纳秒)	
+
+							var num = parseInt(data[i*4+2], 10);
+							if(num > 1000)
+							{
+								col.style.backgroundColor = 'red';
+							}
+
+							col = row.insertCell(4);
+							var r = parseInt(data[i*4+3], 10) * 1000;   //*1000转javascript格式的ms
+							if(r >= 1000 || r === 0)
+							{
+								var date = new Date(r);
+								col.innerText = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + "--";
+								col.innerText += date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+							}
+							else
+							{
+								col.innerText = "";
+							}
+						}
+						else
+						{
+							break;
+						}
+					}							
+				}
+			}
+
+			window.onload = dataProcess;
+		</script>				
+		<div align="center" style="margin-top:20px;margin-bottom:30px;">
+		    <h4 align="center">&copy; 北斗星通(bdstar.com) | <a href="https://www.bdstar.com" target="_blank">关于我们</a></h4>                    
+		</div>
+ 
+	</body>
+</html>

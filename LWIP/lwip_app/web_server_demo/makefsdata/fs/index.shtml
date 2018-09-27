@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" http-equiv="refresh" content="4" />
+		<title>BDSDO</title>
+		<style type="text/css">
+
+		h3{background-color:#0066CC; color:#fff; margin-top:30px}
+		table{border:solid 1px; border-collapse: collapse;}
+		table td{border:solid 1px; padding:5px; text-align: center; width: 250px; height: 40px}
+
+		.ul1{margin:0;padding:0; list-style:none;}
+		.li1{margin:0;padding:0; list-style:none;}
+		.menu{width:800px;height:48px;margin:0 auto; background:url(img/tab.jpg) repeat-x; }
+		.menu ul{width:800px;float:left;height:48px;display:inline;}
+		.menu ul li{width:200px;height:48px; line-height:48px; text-align:center; float:left;display:inline; }
+		.menu ul li a{width:200px;height:48px; float:left;text-decoration:none; color:#fff; font-size:18px;font-weight:bold;}
+		.menu ul li a:hover{ background:#FF0000 repeat-x; }		
+		
+		.logo{}
+		.bodystyle{  margin:0 auto; width:1000px; background:#d5d5d7;}
+		</style>
+	</head>
+	<body>
+		<div class="menu">
+			<ul class="ul1">
+		    	<li class="li1"><a href="index.shtml">主页</a></li>
+		        <li class="li1"><a href="set.shtml">设置</a></li>
+		        <li class="li1"><a href="timeMonitor.shtml">同步监测</a></li>
+		        <li class="li1"><a href="https://www.bdstar.com" target="_blank">联系我们</a></li>
+		    </ul>
+		</div>	          
+
+		<div align="center">
+			<h3><span>系统状态显示</span></h3>
+			<table id="tb1">
+				<tr>
+				  <td width="200">UTC时间</td>
+				  <td width="200"></td>
+				  
+				</tr>   
+				<tr>
+				  <td width="200">经纬度</td>
+				  <td width="200"></td>
+				</tr>
+				<tr>
+				  <td width="200">驯服状态</td>
+				  <td width="200"></td>
+				</tr>
+				<tr>
+					<td width="200">当前时钟源</td>
+					<td width="200"></td>
+				</tr>
+			</table>
+		</div>
+		
+		<div align="center">
+			<h3><span >PTP状态显示</span></h3>
+			<table id = "tb2">
+				<tr>
+				  <td width="200">PTP主从模式</td>
+				  <td width="200"></td>
+				</tr>   
+				<tr>
+				  <td width="200">PTP监控状态</td>
+				  <td width="200"></td>
+				</tr>  
+				<tr>
+					<td width="200">PTP时间</td>
+					<td width="200"></td>
+				</tr>
+				<tr>
+					<td width="200">服务器IP</td>
+					<td width="200"></td>
+				</tr>
+			</table>
+		</div>
+		
+		<div align="center">
+			<h3><span>E1状态显示</span></h3>
+			<table border="1" cellpadding="10" id="tb3">
+				<tr>
+				  <td width="200">PTPoverE1主从模式</td>
+				  <td width="200"></td>
+				</tr>   
+				<tr>
+				  <td width="200">PTPoverE1监控状态</td>
+				  <td width="200"></td>
+				</tr>  
+				<tr>
+					<td width="200">PTPoverE1时间</td>
+					<td width="200"></td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="ssi">
+			<p id="SystemState" style="display: none;"><!--#SystemState--></p>
+			<p id="PTPE1State"  style="display: none;"><!--#PTPE1State--></p>
+		</div>
+		
+		<script type="text/javascript">
+			var mode = {"0":"从", "1":"主"};
+			var stat = {"0":"预热", "1":"锁定", "2":"晶振守时", "3":"铷钟守时", "10":"异常", "11":"正常", "20":"异常", "21":"正常"};   //[0-9] 驯服状态  [10-19] PTP状态  [20-29]E1状态
+			var data = {"0":"外部1PPS+TOD", "1":"北斗", "2":"时频单元", "3":"电口B(DC)", "4":"光口B(DC)", "5":"PTP overE1", "6":"NTP/PTP"};
+
+			function dataProcess () {
+				var re1 = /\$/;
+				var ele = document.getElementById("ssi").children;
+
+				var tab = document.getElementById("tb1");    
+				var res = ele[0].innerHTML.split(re1);      
+				if(res.length < 3)return;
+
+				tab.rows[0].cells[1].innerText = res[1];
+				tab.rows[1].cells[1].innerText = res[2];
+				tab.rows[2].cells[1].innerText = stat[res[3]];
+				tab.rows[3].cells[1].innerText = data[res[4]]
+
+				tab = document.getElementById("tb2");      
+				res = ele[1].innerHTML.split(re1);       
+
+				tab.rows[0].cells[1].innerText = mode[res[1]];
+				tab.rows[1].cells[1].innerText = stat[res[2]];
+				tab.rows[2].cells[1].innerText = res[3];
+				tab.rows[3].cells[1].innerText = res[4];
+
+				tab = document.getElementById("tb3");   
+
+				tab.rows[0].cells[1].innerText = mode[res[5]];
+				tab.rows[1].cells[1].innerText = stat[res[6]];
+				tab.rows[2].cells[1].innerText = res[7];
+			}
+			window.onload = dataProcess;
+		</script>
+
+		<div align="center" style="margin-top:20px;margin-bottom:30px;">
+		   <tr>
+		    <td align="center">&copy; 北斗星通(bdstar.com) | <a href="https://www.bdstar.com" target="_blank">关于我们</a> 
+		    </td>          
+		   </tr>    
+		   <BR>          
+		</div>
+	</body>
+</html>

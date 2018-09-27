@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>BDSDO</title>
+		<style type="text/css">
+		
+		h3{background-color:#0066CC; color:#fff; margin-top:30px}
+		select{border-style: solid; overflow: auto; border: none; outline: none; text-align: center; font-size: 21px;}
+		table{border:solid 1px; border-collapse: collapse;}
+		table td{border:solid 1px; padding:5px; text-align: center; width: 250px; height: 38px}
+
+		.ul1{margin:0;padding:0; list-style:none;}
+		.li1{margin:0;padding:0; list-style:none;}
+		.menu{width:800px;height:48px;margin:0 auto; background:url(img/tab.jpg) repeat-x; }
+		.menu ul{width:800px;float:left;height:48px;display:inline;}
+		.menu ul li{width:200px;height:48px; line-height:48px; text-align:center; float:left;display:inline; }
+		.menu ul li a{width:200px;height:48px; float:left;text-decoration:none; color:#fff; font-size:18px;font-weight:bold;}
+		.menu ul li a:hover{ background:#FF0000 repeat-x; }		
+		.order{border:none; border-collapse: collapse; font-size: 19px; font-weight: 500}
+		.order td{border:none; padding: 2px; text-align: center; width: auto; height: auto;}
+
+		.logo{}
+		.bodystyle{  margin:0 auto; width:1000px; background:#d5d5d7;} 
+		</style>
+	</head>
+	<body>
+		<div class="menu">
+				<ul class="ul1">
+		    	<li class="li1"><a href="index.shtml">主页</a></li>
+		        <li class="li1"><a href="set.shtml">设置</a></li>
+		        <li class="li1"><a href="timeMonitor.shtml">同步监测</a></li>
+		        <li class="li1"><a href="https://www.bdstar.com" target="_blank">联系我们</a></li>
+			    </ul>
+		</div>	
+		
+		<div align="center">
+			<h3><span>参考设置</span></h3>
+			<table class="order">
+				<tr>
+					<td>1. </td>
+					<td rowspan="7">
+						<select id="selOrder" name="s1" size="7">				
+							<option id="1" value="0">外部1PPS+TOD</option>			
+							<option id="2" value="1">北斗</option>			
+							<option id="3" value="2">时频单元</option>			
+							<option id="4" value="3">电口B(DC)</option>			
+							<option id="5" value="4">光口B(DC)</option>
+							<option id="6" value="5">PTP overE1</option>
+							<option id="7" value="6">NTP/PTP</option>			
+						</select>
+					</td>
+					<td rowspan="7">
+						<button  name="btn_up"   value="up"   onclick="move(this, 1)">👆</button>
+						<button  name="btn_down" value="down" onclick="move(this, -1)">👇</button>
+					</td>
+				</tr>
+				<tr><td>2. </td></tr>
+				<tr><td>3. </td></tr>
+				<tr><td>4. </td></tr>
+				<tr><td>5. </td></tr>
+				<tr><td>6. </td></tr>
+				<tr><td>7. </td></tr>
+			</table>
+		</div>
+
+		<div align="center">
+			<h3><span>IP设置</span></h3>
+			<br>本机IP
+			<table border="1" cellpadding="10" id="tb1">
+				<tr>
+					<td width="200">IP地址：</td>
+					<td width="200"></td>				  
+				</tr>   
+				<tr>
+				 	<td width="200">网关：</td>
+				  	<td width="200"></td>
+				</tr>
+				<tr>
+				  	<td width="200">子网掩码：</td>
+				  	<td width="200"></td>
+				</tr>
+			</table>
+
+			<form id="localipSet" name="form_localIpSet" method="get" action="/localip.cgi" onsubmit="return dataCheck(this)">
+				<table border="1" cellpadding="10">
+						<tr>
+						  <td width="200">IP地址：</td>
+						  <td width="200"><input type='text' name = "ip" maxlength="15" /> </td>
+						</tr>   
+						<tr>
+						  <td width="200">网关：</td>
+						  <td width="200"><input type='text' name = "gw" maxlength="15" /> </td>
+						</tr>
+						<tr>
+						  <td width="200">子网掩码：</td>
+						  <td width="200"><input type='text' name = "nm" maxlength="15" /> </td>
+						</tr>
+				</table>
+				<input type="submit" name="button1" id = "btn_Localip" value = "设置">
+			</form>
+
+			<br>NTP/PTP
+			<table border="1" cellpadding="10" id="tb2">
+			<tr>
+			  <td width="200">IP地址：</td>
+			  <td width="200"></td>		  
+			</tr>   
+			<tr>
+			  <td width="200">网关：</td>
+			  <td width="200"></td>
+			</tr>
+			<tr>
+			  <td width="200">子网掩码：</td>
+			  <td width="200"></td>
+			</tr>
+			</table>
+
+			<form id="NTPipSet" name="form_ntpIPSet" method="get" action="/ptpip.cgi" onsubmit="return dataCheck(this)">
+				<table border="1" cellpadding="10">
+					<tr>
+					  <td width="200">IP地址：</td>
+					  <td width="200"> <input type='text' name="pipaddr" maxlength="15" /> </td>
+					</tr>   
+					<tr>
+					  <td width="200">网关：</td>
+					  <td width="200"><input type='text' name="pgat" maxlength="15" /> </td>
+					</tr>
+					<tr>
+					  <td width="200">子网掩码：</td>
+					  <td width="200"><input type='text' name="pmask" maxlength="15" /> </td>
+					</tr>
+				</table>
+				<input type="submit" name="button2" id = "btn_ntpip", value="设置">
+			</form>
+
+			<br>服务器IP
+			<form id="RemoteIPSet" name="form_remoteIpset" method="get" action="/remote.cgi" onsubmit="return dataCheck(this)">
+				<input type="text" name="ip"><br>
+				<input type="submit" name="set" value="设置">
+			</form>
+		</div>
+
+		<div align="center">
+			<h3><span>主从设置</span></h3>
+			<table class="order">
+				<tr>
+					<form id="PTPform" name="form_PTP" method="get" action="/PTPMode.cgi">
+						<td>NTP/PTP</td>
+						<td><input type="radio" name="PTPMode" value="1" id="Master"   checked="checked"/></td>
+						<td>主模式</td>
+						<td><input type="radio" name="PTPMode" value="0" id="Slave"  /></td>
+						<td>从模式</td>
+						<td><input type="submit" name="btn_PTPset" title="设置" value="设置" id="btn_PTPMode"></td>
+					</form>	
+				</tr>
+				<tr>
+					<form id="E1form" name="form_E1" method="get" action="/E1Mode.cgi" onsubmit="return E1CheckForm()">
+						<td> E1  </td>
+						<td><input type="radio" name="E1Mode" value="0" id="E1Master" checked="checked"></td>
+						<td>主模式</td>
+						<td><input type="radio" name="E1Mode" value="1"  id="E1Slave"></td>
+						<td>从模式</td>
+						<td><input type="submit" name="btn_E1set" title="设置" value="设置" id="btn_E1Mode"></td>
+					</form>
+				</tr>
+			</table>
+		</div>
+	
+		<form method="get" action="/Order.cgi" id="orderform">
+			<input type="hidden" name="timeOrder" id="order">
+		</form>
+
+		<div align="center" style="margin-top:20px;margin-bottom:30px;">
+		   <tr> <td align="center">&copy; 北斗星通(bdstar.com) | <a href="https://www.bdstar.com" target="_blank">关于我们</a></td></tr>    
+		   <BR>
+	    </div>	
+	    
+	    <div id="ssi">
+			<p id="LocalIPInfo" style="display: none;"><!--#LocalIPInfo--></p>
+			<p id="NTPlIPInfo" style="display: none;"><!--#NTPIPInfo--></p>
+			<p id="TimeSourceOrder"  style="display: none;"><!--#OrderInfo--></p>
+		</div>
+
+		<script type="text/javascript">
+			var data = {"0":"外部1PPS+TOD", "1":"北斗", "2":"时频单元", "3":"电口B(DC)", "4":"光口B(DC)", "5":"PTP overE1", "6":"NTP/PTP"};
+			function dataCheck (form) {
+				var re1 = /(?=(\b|\D))(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))(?=(\b|\D))/;
+				for(i = 0; i < form.length; i++)
+				{
+					var temp = form.elements[i];
+					if(temp.type == "text")
+					{
+						if(temp.value == "")
+					    {        
+				              alert(temp.name + "不能为空!");
+				              temp.focus(); 
+				              return false;
+					    }
+					    var str = temp.value;
+					    if(str.indexOf(" ", 0) != -1)
+					    {
+					    	alert("请勿在" + temp.name + "中输入空格");
+					    	temp.focus(); 
+					    	return false;
+					    }
+					    if(re1.test(temp.value) == false)
+					    {
+					    	alert(temp.name + "格式错误");
+					    	temp.focus();
+					    	return false;
+					    }
+					   var res = temp.value.split(".");
+					   temp.id = "";
+					   for(var j = 0; j < 4; j++)
+					   {
+					   		res[j] = "0000" + res[j];
+					   		temp.id += res[j].substring(res[j].length-3);
+					   }
+					}
+				}
+				for(i = 0; i < form.length; i++)
+				{
+					temp = form.elements[i];
+					if(temp.type === "text")					
+					{
+						temp.value = temp.id;
+					}
+				}
+				return true;
+			}
+
+			function dataProcess () {
+				var re1 = /\$/;
+				var ele = document.getElementById("ssi").children;
+
+				var tab = document.getElementById("tb1");
+				var res = ele[0].innerHTML.split(re1);
+
+				if(res.length>3){
+					for (var i = 0; i < 3; i++) {
+						var td = tab.rows[i].cells[1];
+						td.innerText = res[i+1];
+					}
+				}
+
+				tab = document.getElementById("tb2");
+				res = ele[1].innerHTML.split(re1);
+				if(res.length>3){
+					for (var i = 0; i < 3; i++) {
+						var td = tab.rows[i].cells[1];
+						td.innerText = res[i+1];
+					}
+				}
+
+				var sel = document.getElementById("selOrder");
+				res = ele[2].innerHTML.split(re1);
+
+				if(res.length < sel.options.length + 1)
+				{
+					for(var i = 0; i < sel.options.length; i++)
+					{
+						sel.options[i].text = "暂无数据";
+					}
+				}
+				else
+				{
+					for(var i = 0; i < sel.options.length; i++)
+					{
+						sel.options[i].text = data[res[i+1]];
+						sel.options[i].value   = res[i+1];
+					}
+				}
+			}
+
+			function move (obj, ord) {
+				var ele = obj.parentNode.previousElementSibling.children[0];
+				var selectedIndex = ele.options.selectedIndex;
+				var selectedText  = ele.options[selectedIndex].text;
+				var selectedValue = ele.options[selectedIndex].value;
+				var step = 0;
+
+				if((-1 == ord) && (selectedIndex < ele.options.length-1))
+				{
+					step = 1;
+				}
+				else if((1 == ord) && (selectedIndex > 0)){
+					step = -1;
+				}
+				ele.options[selectedIndex].text = ele.options[selectedIndex + step].text;
+				ele.options[selectedIndex].value = ele.options[selectedIndex + step].value;
+				ele.options[selectedIndex].selected = false;
+				ele.options[selectedIndex + step].text = selectedText;
+				ele.options[selectedIndex + step].value = selectedValue;
+				ele.options[selectedIndex + step].selected = true;
+
+				var od = document.getElementById("order");
+				for(var i = 0; i < ele.options.length; i++)
+				{
+					od.value = od.value + ele.options[i].value;
+				}
+				var form = document.getElementById("orderform");
+				form.submit();
+			}
+
+			window.onload = dataProcess;
+		</script>
+	</body>
+</html>
